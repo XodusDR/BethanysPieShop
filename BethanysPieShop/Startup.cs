@@ -1,3 +1,4 @@
+using BethanysPieShop.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +17,18 @@ namespace BethanysPieShop
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IPieRepository, MockPieRepository>();
+            services.AddScoped<ICategoryRepository, MockCategoryRepository>();
+            //service.AddTransient()
+            //service.AddSingleton()
             services.AddControllersWithViews();//Adds MVC service
+
+            
+
+            /*Registration Options
+             AddTransient: Ask a container for aa instance will give a new instance
+             AddSingleton: A single object being created and the same instance is being used.
+             AddScoped   : Create one instance per request aand uses the same instance within mthe same reg request.*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,4 +53,4 @@ namespace BethanysPieShop
             });
         }
     }
-}
+} 
