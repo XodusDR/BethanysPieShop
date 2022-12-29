@@ -2,6 +2,8 @@ using BethanysPieShop.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
@@ -13,10 +15,23 @@ namespace BethanysPieShop
 {
     public class Startup
     {
+        public IConfiguration Configuration { get;}
+
+        public Startup(IConfiguration configuration) 
+        {
+            Configuration = configuration;
+        }
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddScoped<IPieRepository, MockPieRepository>();
             services.AddScoped<ICategoryRepository, MockCategoryRepository>();
             //service.AddTransient()
@@ -26,7 +41,7 @@ namespace BethanysPieShop
             
 
             /*Registration Options
-             AddTransient: Ask a container for aa instance will give a new instance
+             AddTransient: Ask a container for a instance will give a new instance
              AddSingleton: A single object being created and the same instance is being used.
              AddScoped   : Create one instance per request aand uses the same instance within mthe same reg request.*/
         }
